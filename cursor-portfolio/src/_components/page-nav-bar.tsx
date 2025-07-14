@@ -2,7 +2,6 @@
 import { usePathname, useRouter } from 'next/navigation';
 
 const navs = [
-    { label: 'Parking', path: '/parking' },
     { label: 'Well Made', path: '/well-made' },
     { label: 'route', path: '/' },
 ];
