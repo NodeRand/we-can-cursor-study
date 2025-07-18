@@ -1,7 +1,18 @@
 export interface WeatherData {
-    temperature: number;
-    description: string;
-    icon: string;
+    main: {
+        temp: number;
+        feels_like: number;
+        humidity: number;
+    };
+    weather: Array<{
+        main: string;
+        description: string;
+        icon: string;
+    }>;
+    name: string;
+    sys: {
+        country: string;
+    };
 }
 
 export interface TodoItem {

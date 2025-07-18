@@ -1,6 +1,23 @@
 import { useState, useEffect } from 'react';
 import { WeatherData } from '../types';
 
+interface OpenWeatherResponse {
+    main: {
+        temp: number;
+        feels_like: number;
+        humidity: number;
+    };
+    weather: Array<{
+        main: string;
+        description: string;
+        icon: string;
+    }>;
+    name: string;
+    sys: {
+        country: string;
+    };
+}
+
 const weatherDescriptionKo: { [key: string]: string } = {
     'clear sky': '맑음',
     'few clouds': '구름 조금',
@@ -47,23 +64,41 @@ export const useWeather = () => {
                 const lon = 126.978;
                 const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
 
+                if (!API_KEY) {
+                    throw new Error('OpenWeather API 키가 설정되지 않았습니다');
+                }
+
                 const response = await fetch(
-                    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`,
+                    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=kr`,
                 );
 
                 if (!response.ok) {
                     throw new Error('날씨 정보를 가져오는데 실패했습니다');
                 }
 
-                const data = await response.json();
+                const data: OpenWeatherResponse = await response.json();
 
-                setWeather({
-                    temperature: Math.round(data.main.temp),
-                    description:
-                        weatherDescriptionKo[data.weather[0].description] ||
-                        data.weather[0].description,
-                    icon: data.weather[0].icon,
-                });
+                // API 응답을 WeatherData 타입에 맞게 매핑
+                const weatherData: WeatherData = {
+                    main: {
+                        temp: Math.round(data.main.temp),
+                        feels_like: data.main.feels_like,
+                        humidity: data.main.humidity,
+                    },
+                    weather: data.weather.map(w => ({
+                        main: w.main,
+                        description:
+                            weatherDescriptionKo[w.description] ||
+                            w.description,
+                        icon: w.icon,
+                    })),
+                    name: data.name,
+                    sys: {
+                        country: data.sys.country,
+                    },
+                };
+
+                setWeather(weatherData);
                 setLoading(false);
             } catch (err) {
                 setError(
