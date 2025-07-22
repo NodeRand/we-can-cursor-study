@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Message } from '@/components/chat/message';
 import { ChatInput } from '@/components/chat/chat-input';
 import { Button } from '@/components/ui/button';
@@ -24,6 +24,15 @@ type UIComponent = {
 export default function JsonUiChat() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     const handleSubmit = async (content: string) => {
         try {
@@ -192,6 +201,7 @@ export default function JsonUiChat() {
                         </p>
                     </div>
                 )}
+                <div ref={messagesEndRef} />
             </div>
 
             <ChatInput onSubmit={handleSubmit} disabled={isLoading} />

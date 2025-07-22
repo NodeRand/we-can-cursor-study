@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Message } from '@/components/chat/message';
 import { ChatInput } from '@/components/chat/chat-input';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,15 @@ type Message = {
 export default function BasicChat() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     const handleSubmit = async (content: string) => {
         try {
@@ -59,7 +68,7 @@ export default function BasicChat() {
 
     return (
         <div className="container mx-auto max-w-4xl min-h-screen flex flex-col">
-            <div className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-b border-gray-200 shadow-sm z-10">
+            <div className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-b border-gray-200 shadow-sm z-20">
                 <div className="container mx-auto max-w-4xl">
                     <div className="flex items-center justify-between p-4">
                         <div className="flex items-center gap-4">
@@ -89,6 +98,7 @@ export default function BasicChat() {
                         <p className="text-gray-600">대화를 시작해보세요!</p>
                     </div>
                 )}
+                <div ref={messagesEndRef} />
             </div>
 
             <ChatInput onSubmit={handleSubmit} disabled={isLoading} />
