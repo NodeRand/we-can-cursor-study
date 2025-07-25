@@ -17,8 +17,9 @@ const features = [
         href: '/chat/role',
     },
     {
-        title: '블로그 글 생성',
-        description: '키워드 기반으로 블로그 글을 자동으로 생성합니다.',
+        title: '고급 블로그 생성기',
+        description:
+            'SEO 최적화와 프롬프트 엔지니어링이 적용된 완성형 블로그 글을 생성합니다.',
         icon: '/file.svg',
         href: '/generate/blog',
     },

@@ -9,6 +9,7 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@tailwindcss/typography": "^0.5.16",
         "axios": "^1.6.7",
         "clsx": "^2.1.1",
         "lucide-react": "^0.525.0",
@@ -16,6 +17,9 @@
         "openai": "^4.28.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
+        "react-markdown": "^10.1.0",
+        "rehype-highlight": "^7.0.2",
+        "remark-gfm": "^4.0.1",
         "tailwind-merge": "^2.6.0",
         "zustand": "^4.5.1"
     },
